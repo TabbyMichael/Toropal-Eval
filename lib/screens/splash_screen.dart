@@ -32,7 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Define a fade-in animation from opacity 0 to 1.
     _fadeAnimation = Tween<double>(
       begin: 0.0,
-      end: 1.0,
+      end: 0.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     // Start the fade-in animation.
@@ -79,7 +79,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             child: Semantics(
               label: 'App Logo',
               child: Image.asset(
-                'assets/images/Logo.jpg', // Use your custom icon here
+                'assets/images/logo.png', // Use your custom icon here
                 width: 600,
                 height: 600,
                 fit:

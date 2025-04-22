@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toropal_clone/app_theme.dart';
-import 'package:toropal_clone/providers.dart';
+import 'package:toropal_clone/managing%20states/providers.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
