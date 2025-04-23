@@ -55,28 +55,33 @@ class _IncrementScreenState extends State<IncrementScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Removed isDarkMode logic
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Increment App',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.displayMedium,
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Theme.of(context).brightness == Brightness.dark
-                  ? Icons.light_mode
-                  : Icons.dark_mode,
-            ),
-            onPressed: () {
-              final currentBrightness = Theme.of(context).brightness;
-              final newThemeMode =
-                  currentBrightness == Brightness.dark
-                      ? ThemeMode.light
-                      : ThemeMode.dark;
-              context.read<IncrementBloc>().add(ThemeModeChanged(newThemeMode));
+          BlocBuilder<IncrementBloc, IncrementState>(
+            buildWhen:
+                (previous, current) => previous.themeMode != current.themeMode,
+            builder: (context, state) {
+              return IconButton(
+                icon: Icon(
+                  state.themeMode == ThemeMode.dark
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                ),
+                onPressed: () {
+                  final newThemeMode =
+                      state.themeMode == ThemeMode.dark
+                          ? ThemeMode.light
+                          : ThemeMode.dark;
+                  context.read<IncrementBloc>().add(
+                    ThemeModeChanged(newThemeMode),
+                  );
+                },
+              );
             },
           ),
         ],
@@ -98,7 +103,7 @@ class _IncrementScreenState extends State<IncrementScreen>
                 end: Alignment.bottomRight,
                 colors: [
                   Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  Theme.of(context).colorScheme.background,
+                  Theme.of(context).colorScheme.surface,
                 ],
               ),
             ),
@@ -120,9 +125,7 @@ class _IncrementScreenState extends State<IncrementScreen>
                         decoration: InputDecoration(
                           labelText: 'Enter a positive integer',
                           errorText: state.errorMessage,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          // Using theme's input decoration
                         ),
                         onSubmitted: (_) => _incrementCounter(context),
                       ),
@@ -131,7 +134,11 @@ class _IncrementScreenState extends State<IncrementScreen>
                         children: [
                           ElevatedButton(
                             onPressed: () => _incrementCounter(context),
-                            child: const Text('Increment'),
+                            child: Text(
+                              'Increment',
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.white),
+                            ),
                           ),
                           const SizedBox(width: 12),
                           ElevatedButton(
@@ -144,7 +151,11 @@ class _IncrementScreenState extends State<IncrementScreen>
                               backgroundColor:
                                   Theme.of(context).colorScheme.secondary,
                             ),
-                            child: const Text('Save'),
+                            child: Text(
+                              'Save',
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
@@ -164,7 +175,9 @@ class _IncrementScreenState extends State<IncrementScreen>
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.blue.withOpacity(0.2),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withOpacity(0.2),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -187,14 +200,17 @@ class _IncrementScreenState extends State<IncrementScreen>
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[850] // Dark background in dark mode
+                              : Colors.white, // White background in light mode
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(24),
                         topRight: Radius.circular(24),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
+                          color: Theme.of(context).shadowColor.withOpacity(0.1),
                           blurRadius: 8,
                           offset: const Offset(0, -2),
                         ),
@@ -214,8 +230,14 @@ class _IncrementScreenState extends State<IncrementScreen>
                           Expanded(
                             child:
                                 state.savedValues.isEmpty
-                                    ? const Center(
-                                      child: Text('No values saved yet.'),
+                                    ? Center(
+                                      child: Text(
+                                        'No values saved yet.',
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
+                                      ),
                                     )
                                     : ListView.separated(
                                       itemCount: state.savedValues.length,
@@ -246,9 +268,13 @@ class _IncrementScreenState extends State<IncrementScreen>
                                           ),
                                           child: Text(
                                             'Value: $value',
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.blue,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodyLarge?.copyWith(
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),

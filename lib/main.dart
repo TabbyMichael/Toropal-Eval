@@ -6,29 +6,29 @@ import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Remove ProviderScope
   runApp(const MyApp());
 }
 
-// Change from ConsumerWidget to StatelessWidget
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Remove isDarkMode logic from Riverpod
-
-    // Wrap with BlocProvider
     return BlocProvider(
       create: (context) => IncrementBloc(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Increment App (BLoC)', // Update title
-        theme: AppTheme.lightTheme(),
-        darkTheme: AppTheme.darkTheme(),
-        // Use system theme mode or a fixed one if needed
-        themeMode: ThemeMode.system, // Or ThemeMode.light / ThemeMode.dark
-        home: const SplashScreen(),
+      child: BlocBuilder<IncrementBloc, IncrementState>(
+        buildWhen:
+            (previous, current) => previous.themeMode != current.themeMode,
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Increment App (BLoC)',
+            theme: AppTheme.lightTheme(),
+            darkTheme: AppTheme.darkTheme(),
+            themeMode: state.themeMode,
+            home: const SplashScreen(),
+          );
+        },
       ),
     );
   }

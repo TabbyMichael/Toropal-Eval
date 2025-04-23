@@ -29,5 +29,5 @@ class IncrementState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [value, errorMessage, savedValues];
+  List<Object?> get props => [value, errorMessage, savedValues, themeMode];
 }
