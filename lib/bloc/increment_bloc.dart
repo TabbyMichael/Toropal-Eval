@@ -9,6 +9,7 @@ class IncrementBloc extends Bloc<IncrementEvent, IncrementState> {
   IncrementBloc() : super(const IncrementState()) {
     on<IncrementRequested>(_onIncrementRequested);
     on<SaveValueRequested>(_onSaveValueRequested);
+    on<ThemeModeChanged>(_onThemeModeChanged); // Register the event handler
   }
 
   void _onIncrementRequested(
@@ -26,6 +27,14 @@ class IncrementBloc extends Bloc<IncrementEvent, IncrementState> {
     SaveValueRequested event,
     Emitter<IncrementState> emit,
   ) {
+    // Check if the current value is positive
+    if (state.value <= 0) {
+      emit(
+        state.copyWith(errorMessage: 'Only positive integers can be saved.'),
+      );
+      return;
+    }
+
     if (state.savedValues.contains(state.value)) {
       emit(state.copyWith(errorMessage: 'Value already saved.'));
       return;
@@ -38,6 +47,6 @@ class IncrementBloc extends Bloc<IncrementEvent, IncrementState> {
     ThemeModeChanged event,
     Emitter<IncrementState> emit,
   ) {
-    emit(state.copyWith(themeMode: event.themeMode));
+    emit(state.copyWith(themeMode: event.themeMode, clearError: true));
   }
 }

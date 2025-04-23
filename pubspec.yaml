@@ -92,11 +92,12 @@ flutter_icons:
   image_path: "assets/images/logo1.png"
   remove_alpha_ios: true
 
-flutter_native_splash:
-  color: "#ffffff"
-  image: assets/images/logo1.png
-  android: true
-  ios: true
-
-  android_gravity: center
-  ios_content_mode: center
+# Disabling native splash to avoid showing two logos
+# flutter_native_splash:
+#   color: "#ffffff"
+#   image: assets/images/logo1.png
+#   android: true
+#   ios: true
+#
+#   android_gravity: center
+#   ios_content_mode: center

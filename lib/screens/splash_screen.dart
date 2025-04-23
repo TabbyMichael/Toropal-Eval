@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Remove Riverpod import
 import 'package:toropal_clone/screens/increment_screen.dart';
 
 // SplashScreen is a stateful widget that shows a splash animation and navigates to IncrementScreen.
-class SplashScreen extends ConsumerStatefulWidget {
-  // Allow splash duration to be overridden for testing or flexibility.
+class SplashScreen extends StatefulWidget {
+  // Change from ConsumerStatefulWidget
   final Duration splashDuration;
   const SplashScreen({
     super.key,
@@ -12,10 +12,10 @@ class SplashScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState(); // Change from ConsumerState
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
+class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller; // Controls the animation timing.
   late Animation<double> _fadeAnimation; // Animation for fading in the logo.
@@ -32,7 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // Define a fade-in animation from opacity 0 to 1.
     _fadeAnimation = Tween<double>(
       begin: 0.0,
-      end: 0.0,
+      end: 1.0, // Fix: should fade in to 1.0
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     // Start the fade-in animation.
